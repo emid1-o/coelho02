@@ -1,0 +1,80 @@
+TRABALHO PRATICA 02 - ESTUDO DE CASO: LOCADORA DE VEICULOS
+
+--- 1. IDENTIFICACAO DE CLASSES ---
+* Veiculo (Superclasse)
+* Carro (Subclasse de Veiculo)
+* Moto (Subclasse de Veiculo)
+* Caminhao (Subclasse de Veiculo)
+* Cliente (Superclasse)
+* PessoaFisica (Subclasse de Cliente)
+* PessoaJuridica (Subclasse de Cliente)
+* Contrato
+* Condutor
+* Manutencao
+
+
+--- 2. ATRIBUTOS E METODOS ---
+
+VEICULO
+- Atributos: placa (String), modelo (String), valor_diaria (Float)
+- Metodos: calcular_valor_total(dias), alterar_status_disponibilidade()
+
+CARRO
+- Atributos: quantidade_portas (Int), tipo_combustivel (String), capacidade_porta_malas (Float)
+- Metodos: abrir_porta_malas(), exibir_detalhes_carro()
+
+MOTO
+- Atributos: cilindradas (Int), partida_eletrica (Boolean), tipo_freio (String)
+- Metodos: acionar_partida(), exibir_detalhes_moto()
+
+CAMINHAO
+- Atributos: capacidade_carga_toneladas (Float), quantidade_eixos (Int), comprimento (Float)
+- Metodos: registrar_carga(peso), verificar_limite_peso()
+
+CLIENTE
+- Atributos: telefone (String), endereco (String), data_cadastro (Data)
+- Metodos: atualizar_contato(), exibir_dados_cliente()
+
+PESSOA FISICA
+- Atributos: nome (String), cpf (String), data_nascimento (Data)
+- Metodos: validar_cpf(), calcular_idade()
+
+PESSOA JURIDICA
+- Atributos: razao_social (String), cnpj (String), nome_fantasia (String)
+- Metodos: validar_cnpj(), emitir_nota_fiscal()
+
+CONTRATO
+- Atributos: data_inicio (Data), data_termino (Data), valor_total (Float), status (String)
+- Metodos: finalizar_contrato(), cancelar_contrato()
+
+CONDUTOR
+- Atributos: nome (String), cnh (String), categoria_cnh (String)
+- Metodos: verificar_validade_cnh(), atualizar_dados()
+
+MANUTENCAO
+- Atributos: data (Data), tipo_servico (String), custo (Float)
+- Metodos: aplicar_desconto(percentual), exibir_relatorio()
+
+
+--- 3. HERANCA ---
+
+1. Hierarquia de Veiculos
+- Superclasse: Veiculo
+- Subclasses: Carro, Moto, Caminhao
+- Justificativa: Carros, motos e caminhoes compartilham caracteristicas genericas (placa, modelo, valor da diaria). A heranca evita a duplicacao de codigo, permitindo que as subclasses herdem esses atributos e adicionem apenas suas particularidades (ex: cilindradas para moto, capacidade de carga para caminhao).
+
+2. Hierarquia de Clientes
+- Superclasse: Cliente
+- Subclasses: PessoaFisica, PessoaJuridica
+- Justificativa: Ambos os tipos de clientes possuem dados de contato e endereco em comum. A divisao em subclasses acomoda as regras de negocio e documentos especificos exigidos para cada tipo (CPF e nome para pessoa fisica vs. CNPJ e razao social para pessoa juridica).
+
+
+--- 4. RELACIONAMENTOS ENTRE CLASSES ---
+
+- Contrato e Condutor (Composicao): O texto afirma expressamente que "se o contrato for excluido, os dados do condutor nao tem mais motivo para existir". Isso caracteriza uma dependencia existencial forte, onde o ciclo de vida do Condutor e totalmente gerenciado pelo Contrato (a parte morre com o todo).
+
+- Veiculo e Manutencao (Composicao): O historico de manutencoes e intrinseco ao veiculo. Se um veiculo e removido do sistema da locadora (ex: vendido ou perda total), seu historico de manutencao no sistema perde a utilidade e e excluido em conjunto.
+
+- Contrato e Cliente (Associacao Simples): Um contrato conhece seu cliente, mas ambos existem de forma independente. O cliente continua no banco de dados do sistema mesmo que seu contrato seja cancelado ou chegue ao fim.
+
+- Contrato e Veiculo (Associacao Simples): O veiculo e apenas "emprestado" ao contrato. A existencia do veiculo nao depende do contrato, e um mesmo veiculo passara por varios contratos diferentes ao longo de sua vida util na locadora.
